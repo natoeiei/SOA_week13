@@ -14,7 +14,7 @@ client = TestClient(app)
 def test_admin_login_page():
     """Test that the admin login page returns a 200 status code."""
     response = client.get("/admin/login")
-    assert response.status_code == 300
+    assert response.status_code == 200
     assert "login" in response.text.lower()
 
 def test_docs_endpoint():
