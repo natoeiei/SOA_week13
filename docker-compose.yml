@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   # FastAPI application
@@ -29,7 +29,7 @@ services:
 
   # MySQL database
   db:
-    image: mysql:5.7
+    image: mysql
     container_name: db_mysql
     ports:
       - "3306:3306"
