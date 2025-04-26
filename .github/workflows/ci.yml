@@ -89,6 +89,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: natoeiei/Project_SOA_14:latest
+          tags: natoeiei/project_soa_14:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
