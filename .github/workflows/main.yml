@@ -85,3 +85,35 @@ jobs:
           tags: mini-ecommerce-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+          #deploy to DigitalOcean Droplet
+  deploy:
+    name: Deploy to DigitalOcean Droplet
+    runs-on: ubuntu-latest
+    needs: build  # รอให้ Build Docker Image เสร็จก่อน
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' ||  github.event_name == 'pull_request'
+
+    steps:
+      - name: Setup SSH Key
+        run: |
+          echo "$SSH_KEY" > key.pem
+          chmod 600 key.pem
+        env:
+          SSH_KEY: ${{ secrets.DO_SSH_KEY }}
+
+      - name: Connect & Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} << 'EOF'
+            cd /root || mkdir -p /root && cd /root
+            rm -rf project-ecom-soa
+            git clone https://github.com/natoeiei/SOA_week13
+            cd SOA_week13
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            sudo apt update
+            sudo apt install docker.io -y
+            sudo systemctl start docker
+            docker-compose pull
+            docker-compose up -d
+          EOF
+        

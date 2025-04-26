@@ -3,7 +3,7 @@
 services:
   # FastAPI application
   backend:
-    build: .
+    image: natoeiei/project_soa_14:latest
     container_name: fastapi_app
     ports:
       - "8000:8000"
